@@ -1,11 +1,16 @@
 import sublime
 import sublime_plugin
 
-# A lot of this is likely to be cobbled together from StackOverflow or otherwise be pretty messy.
-# Haven't had a lot of practice with Python in the past year+, but let's see what happens.
+# Commentate command for ESDoc style JavaScript comments.
+# Tested extensively using SublimeText3 console and view.run_command('commentate_esdoc'); the name is (so far?) auto
+# generated based on the class name. Note that the class must end with "Command" per ST3 plugin API requirements.
 class CommentateEsdocCommand(sublime_plugin.TextCommand):
   def run(self, edit):
-    print(edit)
+    view = self.view
 
-    print(self.view.substr(self.view.line(self.view.sel()[0])))
-    self.view.insert(edit, 1, "Hello, World!")
+    # https://stackoverflow.com/questions/30115649/get-current-line-in-sublime-text-3-plugin -
+    # self.view.sel() gets the array of selected regions tracked on the view.
+    # self.view.line(*) gets the line (or lines?) within the specified region.
+    #   The value is returned as the starting and ending indices of the line.
+    # self.view.substr(*) gets the substring corresponding to those indices.
+    commenteeLine = view.substr(view.line(view.sel()[0]))
