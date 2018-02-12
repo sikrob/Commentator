@@ -18,12 +18,24 @@ class CommentateEsdocCommand(sublime_plugin.TextCommand):
     commenteeLine = view.line(view.sel()[0])
     commenteeText = view.substr(commenteeLine)
 
-    if indentRegex.match(commenteeText):
-      indent = ' ' * indentRegex.match(commenteeText).end()
+    indentMatch = indentRegex.match(commenteeText)
+    if indentMatch:
+      indentEnd = indentMatch.end()
+      indent = ' ' * indentEnd
     else:
+      indentEnd = 0
       indent = ''
+
+    name = commenteeText[indentEnd:commenteeText.find('(')].split(' ')[-1]
+
+    args = []
+    for arg in commenteeText[commenteeText.find('(') + 1:commenteeText.find(')')].split(','):
+      args.append(arg.strip())
+
+    print (args)
+
     commentText  = indent + '/**' + '\n'
-    commentText += indent + ' *'  + '\n'
+    commentText += indent + ' * ' + name + '\n'
     commentText += indent + ' */' + '\n'
 
     self.view.insert(edit, commenteeLine.begin(), commentText)
