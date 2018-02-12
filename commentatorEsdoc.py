@@ -30,12 +30,14 @@ class CommentateEsdocCommand(sublime_plugin.TextCommand):
 
     args = []
     for arg in commenteeText[commenteeText.find('(') + 1:commenteeText.find(')')].split(','):
-      args.append(arg.strip())
+      args.append(arg.strip().split('=')[0].strip())
 
     print (args)
 
-    commentText  = indent + '/**' + '\n'
-    commentText += indent + ' * ' + name + '\n'
-    commentText += indent + ' */' + '\n'
+    commentText    = indent + '/**' + '\n'
+    commentText   += indent + ' * ' + name + '\n'
+    for arg in args:
+      commentText += indent + ' * @param {*} ' + arg + '\n'
+    commentText   += indent + ' */' + '\n'
 
     self.view.insert(edit, commenteeLine.begin(), commentText)
