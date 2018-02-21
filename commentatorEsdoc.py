@@ -35,7 +35,8 @@ class CommentateEsdocCommand(sublime_plugin.TextCommand):
     commentText    = indent + '/**' + '\n'
     commentText   += indent + ' * ' + name + '\n'
     for arg in args:
-      commentText += indent + ' * @param {*} ' + arg + '\n'
+      if len(arg) > 0:
+        commentText += indent + ' * @param {*} ' + arg + '\n'
     commentText   += indent + ' */' + '\n'
 
     self.view.insert(edit, commenteeLine.begin(), commentText)
